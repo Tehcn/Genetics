@@ -1,0 +1,17 @@
+{
+  "name": "genetics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": "ts-node index.ts",
+    "prestart": "clear && tsc --outDir dist index.ts",
+    "start": "cd dist && node --max-old-space-size=8192 index.js",
+    "poststart": "cd .."
+  },
+  "author": "Noah Perry",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node": "^10.4.0"
+  }
+}
