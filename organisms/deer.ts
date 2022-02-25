@@ -13,6 +13,7 @@ class Deer extends Organism implements IHerbivore, ISexual {
     public genotype: Genotype;
     public mateAge: number;
     public mateTime: number;
+    public eatChance: number;
     public gender: string;
     public parents: Deer[] | null;
 
@@ -41,6 +42,7 @@ class Deer extends Organism implements IHerbivore, ISexual {
         this.parents = parent;
         this.mateAge = 2;
         this.mateTime = 0;
+        this.eatChance = 0.7;
         
         if(this.parents == null || this.parents.length == 0) {
             this.dna = DNA.generate([], Deer.traits);
@@ -52,8 +54,15 @@ class Deer extends Organism implements IHerbivore, ISexual {
     }
 
     public eat(grass: Grass) {
-        this.hp += 2;
-        grass.die();
+        let willEat = Math.random();
+        if(willEat < this.eatChance) {
+            this.hp += 25 / 2;
+            grass.die();
+            return true;
+        } else {
+            this.hp -= 50;
+            return false
+        }
     }
 
     public reproduce(other: Deer): Deer | null {

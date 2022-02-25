@@ -5,17 +5,26 @@ import { Grass } from './organisms/grass';
 import { Deer } from './organisms/deer';
 import { Wolf } from './organisms/wolf';
 
-import { printHeapSize } from './mem';
-import { appendFile, writeFileSync } from 'fs';
+import { printHeapSize, printUsedMemory } from './mem';
+import { appendFileSync, writeFileSync, readFileSync, existsSync } from 'fs';
 
 let loop: NodeJS.Timer;
+let runs: number;
 
 const Options = {
     LogInitialOrganisms: false,
 }
 
 function init() {
-    writeFileSync("data.csv", "year,grass,deer,wolf\n");
+    if(!existsSync("data/runs.txt")) {
+        writeFileSync("data/runs.txt", "0", { flag: "wx" });
+        runs = 0;
+    } else {
+        runs = Number.parseInt(readFileSync("data/runs.txt").toString());
+        writeFileSync("data/runs.txt", (runs + 1).toString());
+    }
+
+    writeFileSync(`data/data-${runs}.csv`, "year,grass,deer,wolf\n");
 
     printHeapSize();
 
@@ -84,7 +93,9 @@ function update() {
     Deer.all.forEach(deer => {
         deer.age += 1;
         let reproduceChance = Math.random();
-        deer.eat(Grass.all[Math.floor(Math.random() * Grass.all.length)]);
+        if(Deer.all.length / 2 > Grass.all.length) deer.eatChance = 0.3;
+        else deer.eatChance = 0.7
+        if(Math.random() > deer.eatChance) deer.eat(Grass.all[Math.floor(Math.random() * Grass.all.length)]);
         if(reproduceChance < 0.4) {
             Deer.all.forEach(deer2 => {
                 if(deer.pos == deer2.pos) {
@@ -93,18 +104,18 @@ function update() {
                 }
             });
         }
-        if(deer.age > 4) {
-            deer.die();
-        }
+        if(deer.age > 4) deer.die();
     });
 
     // wolf update
     Wolf.all.forEach(wolf => {
         wolf.age += 1;
-        if(Wolf.all.length / 2 > Deer.all.length) {
-            wolf.eatChance = 0.3;
-        }
-        wolf.eat(Deer.all[Math.floor(Math.random() * Deer.all.length)]);
+
+        if(Wolf.all.length / 2 > Deer.all.length) wolf.eatChance = 0.3;
+        else wolf.eatChance = 0.5;
+
+        if(Math.random() < wolf.eatChance) wolf.eat(Deer.all[Math.floor(Math.random() * Deer.all.length)]);
+
         let reproduceChance = Math.random();
         if(reproduceChance < 0.3) {
             Wolf.all.forEach(wolf2 => {
@@ -114,24 +125,23 @@ function update() {
                 }
             });
         }
-        if(wolf.age > 7) {
-            wolf.die();
-        }
+        if(wolf.age > 7) wolf.die();
     });
 
-    console.log(`${year},${Grass.all.length},${Deer.all.length},${Wolf.all.length}`);
+    printUsedMemory();
+    console.log(`\x1b[33m${year},${Grass.all.length},${Deer.all.length},${Wolf.all.length}\x1b[0m`);
 
     // saving data to csv file
-    appendFile("data.csv", `${year},${Grass.all.length},${Deer.all.length},${Wolf.all.length}\n`, (err) => {
-        if(err) throw err;
-    });
+    appendFileSync(`data/data-${runs}.csv`, `${year},${Grass.all.length},${Deer.all.length},${Wolf.all.length}\n`);
 
     year++;
 
-    // have to do this because i don't have enough RAM
-    if(year == 31) {
+    // have to do this because i don't have enough RAM lmao
+    if(year == 26) {
         clearInterval(loop);
     }
+
+
 }
 
 init();

@@ -2,7 +2,6 @@ import { Organism, ISexual, ICarnivore } from '../organism';
 import { Pos } from '../pos';
 import { DNA, Genotype } from '../dna';
 import { Trait } from '../trait';
-import { Grass } from './grass';
 import { Deer } from './deer';
 
 class Wolf extends Organism implements ICarnivore, ISexual {
@@ -61,7 +60,7 @@ class Wolf extends Organism implements ICarnivore, ISexual {
             deer.die();
             return true;
         } else {
-            this.hp -= 1;
+            this.hp -= 50;
             return false
         }
         
