@@ -2155,7 +2155,7 @@ wolf_fast_avg <- c(
     ))
 )
 
-plot(year, wolf_normal_avg, type="l", main = "Population Population Growth Over Time (Average for each Phenotype)", xlab = "Time", ylab = "Population", col = "#0077ff", lty = 0)
+plot(year, wolf_normal_avg, type="l", main = "Wolf Population Growth Over Time (Average for each Phenotype)", xlab = "Time", ylab = "Population", col = "#0077ff", lty = 0)
 lines(year, wolf_normal_avg, lty = 1, col = "blue")
 lines(year, wolf_fast_avg, lty = 2, col = "red")
 
