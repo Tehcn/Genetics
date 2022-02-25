@@ -54,7 +54,7 @@ function init() {
     loop = setInterval(update, 1);
 }
 
-let year = 0;
+let generation = 0;
 
 function update() {
     Grass.all = Grass.all.filter(grass => grass.hp > 0);
@@ -129,15 +129,15 @@ function update() {
     });
 
     printUsedMemory();
-    console.log(`\x1b[33m${year},${Grass.all.length},${Deer.all.length},${Wolf.all.length}\x1b[0m`);
+    console.log(`\x1b[33m${generation},${Grass.all.length},${Deer.all.length},${Wolf.all.length}\x1b[0m`);
 
     // saving data to csv file
-    appendFileSync(`data/data-${runs}.csv`, `${year},${Grass.all.length},${Deer.all.length},${Wolf.all.length}\n`);
+    appendFileSync(`data/data-${runs}.csv`, `${generation},${Grass.all.length},${Deer.all.length},${Wolf.all.length}\n`);
 
-    year++;
+    generation++;
 
     // have to do this because i don't have enough RAM lmao
-    if(year == 26) {
+    if(generation == 26) {
         clearInterval(loop);
     }
 
