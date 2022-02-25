@@ -24,7 +24,7 @@ class Deer extends Organism implements IHerbivore, ISexual {
         { 
             name: 'color',
             id: 'a',
-            phenotypes: ['tall-d', 'short-r']
+            phenotypes: ['light-d', 'dark-r']
         },
         {
             name: 'gender',
@@ -55,6 +55,7 @@ class Deer extends Organism implements IHerbivore, ISexual {
 
     public eat(grass: Grass) {
         let willEat = Math.random();
+        if(DNA.getPhenotype(grass.dna, Grass.traits[0]) == Grass.traits[0].phenotypes[0]) willEat += 0.15; // grass is tall
         if(willEat < this.eatChance) {
             this.hp += 25 / 2;
             grass.die();

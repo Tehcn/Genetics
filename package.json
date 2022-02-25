@@ -7,7 +7,7 @@
     "test": "ts-node index.ts",
     "prestart": "clear && tsc --outDir dist index.ts",
     "start": "cd dist && node --max-old-space-size=8192 index.js",
-    "poststart": "npm run gen-visual",
+    "poststart": "cp -rf dist/data .",
     "gen-visual": "cp -rf dist/data . && Rscript visualization/visual.r"
   },
   "author": "Noah Perry",

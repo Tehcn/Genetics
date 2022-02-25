@@ -3,6 +3,7 @@ import { Pos } from '../pos';
 import { DNA, Genotype } from '../dna';
 import { Trait } from '../trait';
 import { Deer } from './deer';
+import { deepStrictEqual } from 'assert';
 
 class Wolf extends Organism implements ICarnivore, ISexual {
     public pos: Pos;
@@ -22,9 +23,9 @@ class Wolf extends Organism implements ICarnivore, ISexual {
     // -d = dominant trait, -r = recessive trait
     public static traits: Trait[] = [
         { 
-            name: 'color',
+            name: 'speed',
             id: 'a',
-            phenotypes: ['tall-d', 'short-r']
+            phenotypes: ['normal-d', 'fast-r']
         },
         {
             name: 'gender',
@@ -55,6 +56,8 @@ class Wolf extends Organism implements ICarnivore, ISexual {
 
     public eat(deer: Deer): boolean {
         let willEat = Math.random();
+        if(DNA.getPhenotype(deer.dna, Deer.traits[0]) == Deer.traits[0].phenotypes[0]) willEat -= 0.15; // deer is dark
+        if(DNA.getPhenotype(this.dna, Wolf.traits[0]) == Wolf.traits[0].phenotypes[1]) willEat += 0.15; // wolf is fast 
         if(willEat < this.eatChance) {
             this.hp += 2;
             deer.die();

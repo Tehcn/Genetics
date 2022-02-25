@@ -11,6 +11,7 @@ class Grass extends Organism implements IPlant, IAsexual {
     public age: number;
     public genotype: Genotype;
     public parent: Grass | null;
+    public deathAge: number;
 
     public static all: Grass[] = [];
 
@@ -42,12 +43,14 @@ class Grass extends Organism implements IPlant, IAsexual {
             this.dna = DNA.generate([parent!.dna.data], Grass.traits);
         }
         this.genotype = this.dna.data;
-
+        
+        if(DNA.getPhenotype(this.dna, Grass.traits[0]) == Grass.traits[0].phenotypes[0]) this.deathAge = 9;
+        else this.deathAge = 8;
     }
 
     public photosynthesize() {
-        this.hp += 2;
-        // console.log('photosynthesis');
+        if(DNA.getPhenotype(this.dna, Grass.traits[0]) == Grass.traits[0].phenotypes[0]) this.hp += 50; // grass is tall
+        else this.hp += 25;
     }
 
     public reproduce(): Grass | null {
